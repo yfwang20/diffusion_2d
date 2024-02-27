@@ -2,12 +2,12 @@
 
 #include "Material.h"
 
-class Material_1 : public Material
+class Material_2 : public Material
 {
 public:
     static InputParameters validParams();
 
-    Material_1(const InputParameters & parameters);
+    Material_2(const InputParameters & parameters);
 
 protected:
     virtual void computeQpProperties() override;

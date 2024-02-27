@@ -1,18 +1,18 @@
-#include "Material_1.h"
+#include "Material_3.h"
 
-registerMooseObject("diffusion_2DApp", Material_1);
+registerMooseObject("diffusion_2DApp", Material_3);
 
-InputParameters Material_1::validParams()
+InputParameters Material_3::validParams()
 {
     InputParameters params = Material::validParams();
-    params.addClassDescription("For meterial 1 in TWIGL");
+    params.addClassDescription("For meterial 3 in TWIGL");
     params.addRequiredParam<Real>("diffusion_coefficient", "add diffusion coefficient");
     params.addRequiredParam<Real>("absorption_cross_section", "add absorption cross section");
     params.addRequiredParam<Real>("fission_cross_section_v", "add fission cross section v");
     return params;
 }
 
-Material_1::Material_1(const InputParameters & parameters)
+Material_3::Material_3(const InputParameters & parameters)
     :   Material(parameters),
         _input_diffusion_coefficient(getParam<Real>("diffusion_coefficient")),
         _input_absorption_cross_section(getParam<Real>("absorption_cross_section")),
@@ -23,7 +23,7 @@ Material_1::Material_1(const InputParameters & parameters)
 {
 }
 
-void Material_1::computeQpProperties()
+void Material_3::computeQpProperties()
 {
     _diffusion_coefficient[_qp] = _input_diffusion_coefficient;
     _absorption_cross_section[_qp] = _input_absorption_cross_section;
