@@ -4,8 +4,8 @@
     dim = 2
     xmax = 80
     ymax = 80
-    nx = 10
-    ny = 10
+    nx = 100
+    ny = 100
   []
   [subdomain1]
     type = SubdomainBoundingBoxGenerator
@@ -33,21 +33,21 @@
     input = subdomain3
     bottom_left = '24 24 0'
     top_right = '56 56 0'
-    block_id = 3
+    block_id = 1
   []
   [subdomain5]
     type = SubdomainBoundingBoxGenerator
     input = subdomain4
     bottom_left = '56 0 0'
     top_right = '80 80 0'
-    block_id = 1
+    block_id = 3
   []
   [subdomain6]
     type = SubdomainBoundingBoxGenerator
     input = subdomain5
     bottom_left = '0 56 0'
     top_right = '56 80 0'
-    block_id = 1
+    block_id = 3
   []
 []
 
@@ -80,7 +80,7 @@
 
 [Materials]
     [materail_1]
-        type = Material_1
+        type = Material_TWIGL
         block = '1'
         diffusion_coefficient = 0.9
         absorption_cross_section = 0.08
@@ -88,7 +88,7 @@
     []
 
     [materail_2]
-        type = Material_2
+        type = Material_TWIGL
         block = '2'
         diffusion_coefficient = 0.9
         absorption_cross_section = 0.08
@@ -96,7 +96,7 @@
     []
 
     [materail_3]
-        type = Material_3
+        type = Material_TWIGL
         block = '3'
         diffusion_coefficient = 0.9
         absorption_cross_section = 0.029
