@@ -20,5 +20,5 @@ Real Absorption::computeQpResidual()
 
 Real Absorption::computeQpJacobian()
 {
-     return _test[_i][_qp] * (_absorption_cross_section[_qp] * _phi[_j][_qp]);
+    return _test[_i][_qp] * (_absorption_cross_section[_qp] * _phi[_j][_qp]);
 }

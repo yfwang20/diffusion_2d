@@ -16,4 +16,5 @@ protected:
 
 private:
     const MaterialProperty<Real> & _fission_cross_section_v;
+    const Real & _coefficient;
 };

@@ -15,10 +15,10 @@ Diffusion_term::Diffusion_term(const InputParameters & parameters)
 
 Real Diffusion_term::computeQpResidual()
 {
-    return -_grad_test[_i][_qp] * (_diffusion_coefficient[_qp] * _grad_u[_qp]);
+    return _diffusion_coefficient[_qp] * _grad_test[_i][_qp] * _grad_u[_qp];
 }
 
 Real Diffusion_term::computeQpJacobian()
 {
-     return -_grad_test[_i][_qp] * (_diffusion_coefficient[_qp] * _grad_phi[_j][_qp]);
+    return _diffusion_coefficient[_qp] * _grad_test[_i][_qp] * _grad_phi[_j][_qp];
 }
