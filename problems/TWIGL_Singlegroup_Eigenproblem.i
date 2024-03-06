@@ -61,17 +61,17 @@
 
 [Kernels]
     [absorption]
-        type = Absorption
+        type = Absorption_Singlegroup
         variable = flux
     []
 
     [diffusion]
-        type = Diffusion_term
+        type = Diffusion_term_Singlegroup
         variable = flux
     []
 
     [fission]
-        type = Fission
+        type = Fission_Singlegroup
         variable = flux
         extra_vector_tags = 'eigen'
         coefficient = -1.0
@@ -80,7 +80,7 @@
 
 [Materials]
     [materail_1]
-        type = Material_TWIGL
+        type = Material_TWIGL_Singlegroup
         block = '1'
         diffusion_coefficient = 0.9
         absorption_cross_section = 0.08
@@ -88,7 +88,7 @@
     []
 
     [materail_2]
-        type = Material_TWIGL
+        type = Material_TWIGL_Singlegroup
         block = '2'
         diffusion_coefficient = 0.9
         absorption_cross_section = 0.08
@@ -96,7 +96,7 @@
     []
 
     [materail_3]
-        type = Material_TWIGL
+        type = Material_TWIGL_Singlegroup
         block = '3'
         diffusion_coefficient = 0.9
         absorption_cross_section = 0.029

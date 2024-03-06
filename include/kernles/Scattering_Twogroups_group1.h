@@ -2,10 +2,10 @@
 
 #include "Kernel.h"
 
-class Diffusion_term : public Kernel
+class Scattering_Twogroups_group1 : public Kernel
 {
 public:
-    Diffusion_term(const InputParameters & parameters);
+    Scattering_Twogroups_group1(const InputParameters & parameters);
 
     static InputParameters validParams();
 
@@ -15,5 +15,6 @@ protected:
     virtual Real computeQpJacobian() override;
 
 private:
-    const MaterialProperty<Real> & _diffusion_coefficient;
+    const MaterialProperty<Real> & _sigma_s;
+    const VariableValue & _otherflux;
 };

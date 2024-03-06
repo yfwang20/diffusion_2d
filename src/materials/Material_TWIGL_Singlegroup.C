@@ -1,8 +1,8 @@
-#include "Material_TWIGL.h"
+#include "Material_TWIGL_Singlegroup.h"
 
-registerMooseObject("diffusion_2DApp", Material_TWIGL);
+registerMooseObject("diffusion_2DApp", Material_TWIGL_Singlegroup);
 
-InputParameters Material_TWIGL::validParams()
+InputParameters Material_TWIGL_Singlegroup::validParams()
 {
     InputParameters params = Material::validParams();
     params.addClassDescription("For meterial 1 in TWIGL");
@@ -12,7 +12,7 @@ InputParameters Material_TWIGL::validParams()
     return params;
 }
 
-Material_TWIGL::Material_TWIGL(const InputParameters & parameters)
+Material_TWIGL_Singlegroup::Material_TWIGL_Singlegroup(const InputParameters & parameters)
     :   Material(parameters),
         _input_diffusion_coefficient(getParam<Real>("diffusion_coefficient")),
         _input_absorption_cross_section(getParam<Real>("absorption_cross_section")),
@@ -23,7 +23,7 @@ Material_TWIGL::Material_TWIGL(const InputParameters & parameters)
 {
 }
 
-void Material_TWIGL::computeQpProperties()
+void Material_TWIGL_Singlegroup::computeQpProperties()
 {
     _diffusion_coefficient[_qp] = _input_diffusion_coefficient;
     _absorption_cross_section[_qp] = _input_absorption_cross_section;

@@ -2,10 +2,10 @@
 
 #include "Kernel.h"
 
-class Absorption : public Kernel
+class Absorption_Twogroups_group2 : public Kernel
 {
 public:
-    Absorption(const InputParameters & parameters);
+    Absorption_Twogroups_group2(const InputParameters & parameters);
 
     static InputParameters validParams();
 
@@ -16,4 +16,5 @@ protected:
 
 private:
     const MaterialProperty<Real> & _absorption_cross_section;
+    const MaterialProperty<Real> & _sigma_s;
 };

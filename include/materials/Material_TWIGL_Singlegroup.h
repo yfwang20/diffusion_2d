@@ -2,12 +2,12 @@
 
 #include "Material.h"
 
-class Material_TWIGL : public Material
+class Material_TWIGL_Singlegroup : public Material
 {
 public:
     static InputParameters validParams();
 
-    Material_TWIGL(const InputParameters & parameters);
+    Material_TWIGL_Singlegroup(const InputParameters & parameters);
 
 protected:
     virtual void computeQpProperties() override;

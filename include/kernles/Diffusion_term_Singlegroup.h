@@ -2,10 +2,10 @@
 
 #include "Kernel.h"
 
-class Fission : public Kernel
+class Diffusion_term_Singlegroup : public Kernel
 {
 public:
-    Fission(const InputParameters & parameters);
+    Diffusion_term_Singlegroup(const InputParameters & parameters);
 
     static InputParameters validParams();
 
@@ -15,6 +15,5 @@ protected:
     virtual Real computeQpJacobian() override;
 
 private:
-    const MaterialProperty<Real> & _fission_cross_section_v;
-    const Real & _coefficient;
+    const MaterialProperty<Real> & _diffusion_coefficient;
 };
