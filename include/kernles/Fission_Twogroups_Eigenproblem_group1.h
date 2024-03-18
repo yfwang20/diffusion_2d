@@ -2,10 +2,10 @@
 
 #include "Kernel.h"
 
-class Fission_Twogroups_group2 : public Kernel
+class Fission_Twogroups_Eigenproblem_group1 : public Kernel
 {
 public:
-    Fission_Twogroups_group2(const InputParameters & parameters);
+    Fission_Twogroups_Eigenproblem_group1(const InputParameters & parameters);
 
     static InputParameters validParams();
 
