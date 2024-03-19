@@ -4,8 +4,8 @@
     dim = 2
     xmax = 80
     ymax = 80
-    nx = 80
-    ny = 80
+    nx = 10
+    ny = 10
   []
   [subdomain1]
     type = SubdomainBoundingBoxGenerator
@@ -350,7 +350,7 @@
 [UserObjects]
     [eigensolution]
         type = SolutionUserObject
-        mesh = 'TWIGL_Twogroups_Eigenproblem_out.e'
+        mesh = 'results/Eigen_10*10/TWIGL_Twogroups_Eigenproblem_out.e'
         system_variables = 'flux_group1 flux_group2 delayed_c1'
         timestep = LATEST
     []
@@ -359,29 +359,17 @@
 [Executioner]
   type = Transient
   solve_type = 'PJFNK'
-  num_steps = 50
-  dt = 0.01
+  num_steps = 5
+  dt = 0.1
 []
 
 [Postprocessors]
   [fnorm]
     type = ElementIntegralVariablePostprocessor
     variable = fission
-    # execute on residual is important for nonlinear eigen solver!
     execute_on = 'initial timestep_end'
-    # execute_on = 'initial'
-  []
-
-  [fnorm_1]
-    type = ElementExtremeValue
-    variable = flux_group1
-    execute_on = 'initial'
-    # execute on residual is important for nonlinear eigen solver!
-    # execute_on = linear
   []
 []
-
-
 
 [Outputs]
   execute_on = 'timestep_end'

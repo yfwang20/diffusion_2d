@@ -68,10 +68,41 @@
     []
 []
 
+[AuxVariables]
+    [delayed_nucleus]
+        order = CONSTANT
+        family = MONOMIAL
+    []
+
+    [fission]
+        order = CONSTANT
+        family = MONOMIAL
+    []
+[]
+
+[Functions]
+    [absorptionCrossSection_group2]
+        type = Transientproblem2_AbsorptionCrossSection_group2
+    []
+[]
+
 [Kernels]
+    [timederivative_group1]
+        type = NeutronTimeDerivative_group1
+        variable = flux_group1
+    []
+
     [diffusion_group1]
-      type = Diffusion_term_Twogroups_group1
-      variable = flux_group1
+        type = Diffusion_term_Twogroups_group1
+        variable = flux_group1
+    []
+
+    [fission_group1]
+        type = Fission_Twogroups_Transientproblem_group1
+        variable = flux_group1
+        coefficient = -1.0
+        keff = 0.91321
+        otherflux_1 = flux_group2
     []
 
     [absorption_group1]
@@ -80,23 +111,34 @@
     []
 
     [scattering_group1]
-      type = Scattering_Twogroups_group1
-      variable = flux_group1
-      otherflux_1 = flux_group2
-    []
-
-    [fission_group1]
-        type = Fission_Twogroups_Eigenproblem_group1
+        type = Scattering_Twogroups_group1
         variable = flux_group1
         otherflux_1 = flux_group2
-        extra_vector_tags = 'eigen'
-        coefficient = -1.0
     []
 
+    [delayedneutronsources_group1]
+        type = Delayed_NeutronSources_group1
+        variable = flux_group1
+        delayed_nucleus = delayed_nucleus
+    []
+
+    
+    [timederivative_group2]
+        type = NeutronTimeDerivative_group2
+        variable = flux_group2
+    []
 
     [diffusion_group2]
-      type = Diffusion_term_Twogroups_group2
-      variable = flux_group2
+        type = Diffusion_term_Twogroups_group2
+        variable = flux_group2
+    []
+
+    [fission_group2]
+        type = Fission_Twogroups_Transientproblem_group2
+        variable = flux_group2
+        coefficient = -1.0
+        keff = 0.91321
+        otherflux_1 = flux_group1
     []
 
     [absorption_group2]
@@ -105,45 +147,58 @@
     []
 
     [scattering_group2]
-      type = Scattering_Twogroups_group2
-      variable = flux_group2
-      otherflux_1 = flux_group1
-    []
-
-    [fission_group2]
-        type = Fission_Twogroups_Eigenproblem_group2
+        type = Scattering_Twogroups_group2
         variable = flux_group2
         otherflux_1 = flux_group1
-        extra_vector_tags = 'eigen'
-        coefficient = -1.0
+    []
+
+    [delayedneutronsources_group2]
+        type = Delayed_NeutronSources_group2
+        variable = flux_group2
+        delayed_nucleus = delayed_nucleus
     []
 
 
-    [delayed_nucleus_c1_decay]
-        type = DelayedNeutron_Decay
+    [delayed_nucleus_c1_timederivate]
+        type = DelayedNeutron_TimeDerivate
         variable = delayed_c1
-        num = 1
     []
 
-    [delayed_nucleus_c1_fission]
-        type = DelayedNeutron_Fission
+    [delayed_nucleus_c1_decayandfission]
+        type = DelayedNeutron_Decayandfission
         variable = delayed_c1
         num = 1
-        coefficient = -1.0
+        keff = 0.91321
         flux_group1 = flux_group1
         flux_group2 = flux_group2
-        extra_vector_tags = 'eigen'
+        fission = fission
+    []
+[]
+
+[AuxKernels]
+    [delayednucleus_one]
+        type = DelayedNucleus_one
+        variable = delayed_nucleus
+        delayed_nucleus_1 = delayed_c1
+    []
+
+    [fission_aux]
+        type = Fission_aux
+        variable = fission
+        flux_group1 = flux_group1
+        flux_group2 = flux_group2
+        execute_on = 'initial timestep_end'
     []
 []
 
 [Materials]
     [materail_1]
-        type = Material_TWIGL_Twogroups
+        type = Material_TWIGL_Twogroups_forTransientproblem2ofTWIGL
         block = '1'
         diffusion_coefficient_group1 = 1.4
         diffusion_coefficient_group2 = 0.4
         absorption_cross_section_group1 = 0.01
-        absorption_cross_section_group2 = 0.15
+        # absorption_cross_section_group2 = 0.1465 # Changed!
         scattering_cross_section_group1to2 = 0.01
         scattering_cross_section_group2to1 = 0
         kai_group1 = 1
@@ -166,6 +221,13 @@
         lambda_5 = 0.0
         lambda_6 = 0.0
     []
+
+    [material_1_absorption]
+        type = GenericFunctionMaterial
+        block = '1'
+        prop_names = absorption_cross_section_group2
+        prop_values = absorptionCrossSection_group2
+    [../]
 
     [materail_2]
         type = Material_TWIGL_Twogroups
@@ -243,6 +305,13 @@
         value = 0
     []
 
+    [right_c1]
+        type = DirichletBC
+        variable = delayed_c1
+        boundary = 'right'
+        value = 0
+    []
+
     [top_group1]
         type = DirichletBC
         variable = flux_group1
@@ -256,16 +325,62 @@
         boundary = 'top'
         value = 0
     []
+
+    [top_c1]
+        type = DirichletBC
+        variable = delayed_c1
+        boundary = 'top'
+        value = 0
+    []
+[]
+
+[ICs]
+    [ic_flux1]
+        type = SolutionIC
+        solution_uo = eigensolution
+        variable = flux_group1
+        from_variable = 'flux_group1'
+        block = '1 2 3'
+    []
+
+    [ic_flux2]
+        type = SolutionIC
+        solution_uo = eigensolution
+        variable = flux_group2
+        from_variable = 'flux_group2'
+        block = '1 2 3'
+    []
+
+    [ic_c1]
+        type = SolutionIC
+        solution_uo = eigensolution
+        variable = delayed_c1
+        from_variable = 'delayed_c1'
+        block = '1 2 3'
+    []
+[]
+
+[UserObjects]
+    [eigensolution]
+        type = SolutionUserObject
+        mesh = 'results/Eigen_80*80/TWIGL_Twogroups_Eigenproblem_out.e'
+        system_variables = 'flux_group1 flux_group2 delayed_c1'
+        timestep = LATEST
+    []
 []
 
 [Executioner]
-    type = Eigenvalue
+  type = Transient
+  solve_type = 'PJFNK'
+  num_steps = 50
+  dt = 0.01
 []
 
-[VectorPostprocessors]
-  [eigenvalues]
-    type = Eigenvalues
-    execute_on = 'timestep_end'
+[Postprocessors]
+  [fnorm]
+    type = ElementIntegralVariablePostprocessor
+    variable = fission
+    execute_on = 'initial timestep_end'
   []
 []
 
