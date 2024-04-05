@@ -14,10 +14,13 @@ protected:
     
     virtual Real computeQpJacobian() override;
 
+    virtual Real computeQpOffDiagJacobian(unsigned int jvar) override;
+
 private:
     const MaterialProperty<Real> & _kai;
     const MaterialProperty<Real> & _fission_cross_section_v_local;
     const MaterialProperty<Real> & _fission_cross_section_v_other;
     const VariableValue & _otherflux;
     const Real & _coefficient;
+    unsigned int _otherflux_var;
 };

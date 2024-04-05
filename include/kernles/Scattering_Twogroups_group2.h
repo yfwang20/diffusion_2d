@@ -14,7 +14,10 @@ protected:
     
     virtual Real computeQpJacobian() override;
 
+    virtual Real computeQpOffDiagJacobian(unsigned int jvar) override;
+
 private:
     const MaterialProperty<Real> & _sigma_s;
     const VariableValue & _otherflux;
+    unsigned int _otherflux_var;
 };

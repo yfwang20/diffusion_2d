@@ -15,7 +15,8 @@ Fission_Twogroups_Eigenproblem_group2::Fission_Twogroups_Eigenproblem_group2(con
         _fission_cross_section_v_local(getMaterialProperty<Real>("fission_cross_section_v_group2")),
         _fission_cross_section_v_other(getMaterialProperty<Real>("fission_cross_section_v_group1")),
         _otherflux(coupledValue("otherflux_1")),
-        _coefficient(getParam<Real>("coefficient"))
+        _coefficient(getParam<Real>("coefficient")),
+        _otherflux_var(coupled("otherflux_1"))
 {
 }
 
@@ -27,4 +28,13 @@ Real Fission_Twogroups_Eigenproblem_group2::computeQpResidual()
 Real Fission_Twogroups_Eigenproblem_group2::computeQpJacobian()
 {
     return _coefficient * _test[_i][_qp] * _kai[_qp] * (_fission_cross_section_v_local[_qp] * _phi[_j][_qp]);
+}
+
+Real Fission_Twogroups_Eigenproblem_group2::computeQpOffDiagJacobian(unsigned int jvar)
+{
+  if(jvar == _otherflux_var)
+  {
+    return _coefficient * _test[_i][_qp] * _kai[_qp] * (_fission_cross_section_v_other[_qp] * _phi[_j][_qp]);
+  }
+  return 0.0;
 }
