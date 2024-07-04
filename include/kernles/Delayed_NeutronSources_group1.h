@@ -14,6 +14,9 @@ protected:
 
   virtual Real computeQpJacobian() override;
 
+  virtual Real computeQpOffDiagJacobian(unsigned int jvar) override;
+
   const VariableValue & _delayed_nucleus;
   const MaterialProperty<Real> & _kai;
+  unsigned int _delayed_nucleus_var;
 };

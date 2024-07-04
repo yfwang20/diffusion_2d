@@ -18,7 +18,9 @@ Fission_aux::Fission_aux(const InputParameters & parameters)
     _fission_cross_section_v_group2(getMaterialProperty<Real>("fission_cross_section_v_group2"))
 {
 }
+
 Real Fission_aux::computeValue()
 {
-  return _flux_group1[_qp] * _fission_cross_section_v_group1[_qp] + _flux_group2[_qp] * _fission_cross_section_v_group2[_qp];
+  return _flux_group1[_qp] * _fission_cross_section_v_group1[_qp] + 
+  _flux_group2[_qp] * _fission_cross_section_v_group2[_qp];
 }

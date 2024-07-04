@@ -23,7 +23,9 @@ DelayedNeutron_Decayandfission::DelayedNeutron_Decayandfission(const InputParame
         _fission_cross_section_v_group2(getMaterialProperty<Real>("fission_cross_section_v_group2")),
         _flux_group1(coupledValue("flux_group1")),
         _flux_group2(coupledValue("flux_group2")),
-        _fission(coupledValue("fission"))
+        _fission(coupledValue("fission")),
+        _flux1_var(coupled("flux_group1")),
+        _flux2_var(coupled("flux_group2"))
 {
     // if(_num == 1)
     // {
@@ -65,4 +67,17 @@ Real DelayedNeutron_Decayandfission::computeQpResidual()
 Real DelayedNeutron_Decayandfission::computeQpJacobian()
 {
     return _test[_i][_qp] * _lambda[_qp] * _phi[_j][_qp];
+}
+
+Real DelayedNeutron_Decayandfission::computeQpOffDiagJacobian(unsigned int jvar)
+{
+  if(jvar == _flux1_var)
+  {
+    return -_test[_i][_qp] * _beta[_qp] * _fission_cross_section_v_group1[_qp] * _phi[_j][_qp] / _keff;
+  }
+  else if(jvar == _flux2_var)
+  {
+    return -_test[_i][_qp] * _beta[_qp] * _fission_cross_section_v_group2[_qp] * _phi[_j][_qp] / _keff;
+  }
+  return 0.0;
 }

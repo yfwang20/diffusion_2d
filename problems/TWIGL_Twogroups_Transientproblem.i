@@ -52,13 +52,21 @@
 []
 
 [Preconditioning]
-  active = pbp
+  active = smp_lt
   [bdp]
       type = SMP
       petsc_options_iname = '-pc_type'
       petsc_options_value = 'lu'
   []
   
+    [smp_test]
+      type = SMP
+      off_diag_row    = 'flux_group2 flux_group1'
+      off_diag_column = 'flux_group1 flux_group2'
+      petsc_options_iname = '-pc_type'
+      petsc_options_value = 'lu'
+  []
+
   [smp_all]
       type = SMP
       full = true
@@ -84,6 +92,33 @@
     #full = true
     off_diag_row    = 'flux_group2 delayed_c1'
     off_diag_column = 'flux_group1 flux_group2'
+  []
+
+    [pbp_test]
+		type = PBP
+		solve_order = 'delayed_c1 flux_group2 flux_group1'
+		preconditioner  = 'LU LU LU'
+		#full = true
+		off_diag_row    = 'flux_group1 flux_group1'
+		off_diag_column = 'flux_group2 delayed_c1'
+  []
+
+	[pbp_lt]
+		type = PBP
+		solve_order = 'flux_group1 flux_group2 delayed_c1'
+		preconditioner  = 'LU LU LU'
+		#full = true
+		off_diag_row    = 'flux_group2 delayed_c1 delayed_c1'
+		off_diag_column = 'flux_group1 flux_group2 flux_group1'
+  []
+
+  [pbp_all]
+		type = PBP
+		solve_order = 'flux_group1 flux_group2 delayed_c1'
+		preconditioner  = 'LU LU LU'
+		full = true
+		#off_diag_row    = 'flux_group1 flux_group2 delayed_c1 delayed_c1 flux_group1 flux_group2'
+		#off_diag_column = 'flux_group2 flux_group1 flux_group1 flux_group2 delayed_c1 delayed_c1'
   []
 []
 
@@ -394,7 +429,7 @@
 
 [Executioner]
   type = Transient
-  solve_type = JFNK
+  solve_type = PJFNK
   num_steps = 50
   dt = 0.01
 []

@@ -18,7 +18,8 @@ Fission_Twogroups_Transientproblem_group1::Fission_Twogroups_Transientproblem_gr
         _fission_cross_section_v_other(getMaterialProperty<Real>("fission_cross_section_v_group2")),
         _otherflux(coupledValue("otherflux_1")),
         _keff(getParam<Real>("keff")),
-        _coefficient(getParam<Real>("coefficient"))
+        _coefficient(getParam<Real>("coefficient")),
+        _otherflux_var(coupled("otherflux_1"))
 {
 }
 
@@ -31,4 +32,14 @@ Real Fission_Twogroups_Transientproblem_group1::computeQpJacobian()
 {
     return _coefficient * _test[_i][_qp] * (1 - _beta[_qp]) * _kai[_qp] * (_fission_cross_section_v_local[_qp] * _phi[_j][_qp]) / _keff;
     // return 0.0;
+}
+
+Real Fission_Twogroups_Transientproblem_group1::computeQpOffDiagJacobian(unsigned int jvar)
+{   
+    if(jvar == _otherflux_var)
+    {
+        return _coefficient * _test[_i][_qp] * (1 - _beta[_qp]) * _kai[_qp] * 
+        (_fission_cross_section_v_other[_qp] * _phi[_j][_qp]) / _keff;
+    }
+    return 0.0;
 }
